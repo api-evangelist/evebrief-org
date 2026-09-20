@@ -1,0 +1,117 @@
+generated: '2026-09-19'
+method: searched
+source: https://oracle.evebrief.org/.well-known/agent-card.json
+derived_from: openapi/evebrief-org-openapi.json
+docs:
+- https://oracle.evebrief.org/.well-known/x402
+- https://oracle.evebrief.org/docs
+summary: >-
+  The conformance profile is the agent-commerce protocol stack and nothing else: an A2A 0.3.0 agent card
+  (graded conformant) declaring a REQUIRED x402 payment extension, x402 v2 observed live on the endpoint
+  (HTTP 402 + PAYMENT-REQUIRED header + PaymentRequirements body on both GET and POST), an x402 resource-server
+  manifest at /.well-known/x402, settlement in RLUSD on the XRP Ledger mainnet (CAIP-2 xrpl:0) through the
+  t54 facilitator, and a FastAPI-generated OpenAPI 3.1.0 with five routes and no schemas. JSON-RPC 2.0 is
+  declared (preferredTransport JSONRPC) but could not be observed because the 402 gate answers before the
+  RPC layer. No OAuth/OIDC, no RFC 9457, no RFC 9116 security.txt, no RFC 9727 API catalog, no APIs.json,
+  no RFC 8594 sunset signalling, no MCP, no GraphQL. No sector standard applies to a rug-pull risk oracle and
+  none is invented.
+standards:
+- id: a2a
+  name: Agent2Agent protocol
+  version: '0.3.0'
+  conforms: true
+  evidence: a2a/evebrief-org-agent-card.json — protocolVersion "0.3.0", url https://oracle.evebrief.org/, preferredTransport JSONRPC, capabilities object, skills[] of 1 with inputSchema/outputSchema; served at both /.well-known/agent-card.json and the legacy /.well-known/agent.json (byte-identical). Graded conformant in a2a/evebrief-org-a2a.yml.
+- id: x402
+  name: x402 HTTP payment protocol
+  version: '2'
+  conforms: true
+  verification: observed
+  evidence: >-
+    GET and POST https://oracle.evebrief.org/ both returned HTTP 402 with a PAYMENT-REQUIRED response header
+    (base64 JSON) and a JSON body {"x402Version":2,"resource":{...},"accepts":[{"scheme":"exact","network":"xrpl:0","amount":"0.01","asset":"524C555344000000000000000000000000000000","payTo":"rH2tcNh56xoLUssRubra7DSDCgrReSZodW","maxTimeoutSeconds":600,"extra":{"issuer":"rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De","sourceTag":804681468,"facilitator":{"id":"t54-xrpl","name":"t54 XRPL x402 facilitator"},"invoiceId":"..."}}],"error":"PAYMENT-SIGNATURE header is required"}
+    with a fresh invoiceId per request; GET /.well-known/x402 returned a kind resource-server manifest naming
+    the same resource, price and facilitator (well-known/evebrief-org-x402.json); GET /healthz reports
+    payment_mode "xrpl".
+  domain_standard_signature: true
+  note: >-
+    The x402 PaymentRequirements payload — the machine-readable price contract — was observed directly on the
+    endpoint, which is stronger than a prose claim. This is the contract-level signature for agent commerce
+    that this market has. No payment was made.
+- id: a2a-x402-payment-extension
+  name: A2A x402 payment extension (as declared)
+  conforms: true
+  verification: declared
+  evidence: a2a/evebrief-org-agent-card.json capabilities.extensions[0] — uri https://x402.org/extensions/payment/v1, required true, params {scheme exact, network xrpl:0, asset RLUSD, amount 0.01, payTo, issuer, facilitator, maxTimeoutSeconds 600, resource /, mode xrpl}.
+  gaps:
+  - The declared extension URI returns HTTP 404 (x402.org HTML 404 page) — the extension cannot be dereferenced.
+  - The URI differs from the a2a-x402 extension other x402-paying cards declare (https://github.com/google-a2a/a2a-x402/v0.1), so a client keyed on that URI will not recognise this card as x402-payable.
+- id: caip-2
+  name: CAIP-2 chain identifier
+  conforms: true
+  evidence: 'network "xrpl:0" (XRP Ledger mainnet) in the card extension params, the 402 body and the x402 manifest.'
+- id: xrpl-issued-currency
+  name: XRP Ledger issued currency (RLUSD)
+  conforms: true
+  evidence: 'asset "RLUSD" in the card and manifest; asset "524C555344000000000000000000000000000000" (hex-encoded 160-bit currency code for RLUSD) with issuer rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De in the 402 body; the facilitator''s /supported endpoint advertises exactly {"x402Version":2,"scheme":"exact","network":"xrpl:0"}.'
+- id: json-rpc-2.0
+  conforms: true
+  verification: declared
+  evidence: preferredTransport JSONRPC in the card; the OpenAPI operation for POST / is summarised "Jsonrpc" (operationId jsonrpc__post).
+  note: Not observed — a JSON-RPC tasks/get for an unknown id returned the x402 402 challenge rather than a JSON-RPC error object, so the RPC layer cannot be exercised without paying.
+- id: openapi-3.1
+  conforms: true
+  version: 3.1.0
+  evidence: openapi/evebrief-org-openapi.json openapi "3.1.0"; parses; 5 paths, 5 operations, every operation has an operationId and a 200 response.
+  gaps:
+  - No servers[] (FastAPI default; the host is only knowable from the fetch URL and the card).
+  - No components, no securitySchemes, no request body on POST /, no response schemas beyond additionalProperties objects.
+  - No 4xx/5xx responses declared, although the endpoint answers 402 on every unpaid call.
+  - No tags, no info.description, no info.contact, no termsOfService.
+- id: rfc8615-well-known
+  conforms: true
+  evidence: Agent card and x402 manifest served under /.well-known/ on the API host; see well-known/evebrief-org-well-known.yml.
+- id: mcp
+  conforms: false
+  evidence: No MCP endpoint — /mcp, /mcp/, /sse, /messages and /.well-known/mcp.json all 404 on the oracle host; mcp.evebrief.org does not resolve; POST / with tools/list returns the x402 402.
+- id: oauth2
+  conforms: false
+  evidence: No securitySchemes in the contract; /.well-known/oauth-authorization-server 404 on both hosts.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration 404 on both hosts.
+- id: rfc9728-protected-resource
+  conforms: false
+  evidence: /.well-known/oauth-protected-resource 404 on both hosts.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: 'Errors are FastAPI''s {"detail": string} (404) and the x402 PaymentRequirements object (402) in application/json. See errors/evebrief-org-problem-types.yml.'
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt and /security.txt both 404 on both hosts.
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog and /.well-known/api-catalog.json 404 on both hosts.
+- id: apis-json
+  conforms: false
+  evidence: /apis.json, /apis.yml and /.well-known/apis.json 404 on both hosts.
+- id: llms-txt
+  conforms: false
+  evidence: /llms.txt 404 on both hosts; the file in llms/ was generated by API Evangelist.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: No Sunset or Deprecation header declared anywhere; no deprecation policy published.
+- id: idempotency-key
+  conforms: false
+  evidence: No Idempotency-Key header or equivalent; the surface is a paid read-only query. See conventions/evebrief-org-conventions.yml.
+- id: pagination
+  conforms: false
+  evidence: No list operations exist.
+- id: robots-ai-crawler-allow
+  conforms: true
+  evidence: 'https://evebrief.org/robots.txt — "User-agent: *", Allow: /, Disallow: /api/ (a path that 404s); no AI-crawler-specific rules. The oracle host serves no robots.txt (404).'
+compliance_program:
+  published: false
+  note: >-
+    No SOC 2, ISO 27001, PCI DSS or similar certification is claimed on either host; the apex publishes no
+    terms of service or privacy policy at all (see regulatory/evebrief-org-regulatory-posture.yml). No
+    Compliance pointer is emitted.

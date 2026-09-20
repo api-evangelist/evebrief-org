@@ -1,0 +1,52 @@
+generated: '2026-09-19'
+method: searched
+source: openapi/evebrief-org-openapi.json
+docs:
+- https://oracle.evebrief.org/.well-known/agent-card.json
+- https://oracle.evebrief.org/.well-known/x402
+summary:
+  types: []
+  api_key_in: []
+  oauth2_flows: []
+  bearer: false
+  credential_classes: 0
+  payment_gated: true
+  headline: >-
+    No credential of any kind. The OpenAPI declares no securitySchemes (derive-authentication.py found
+    nothing to derive), the agent card declares no securitySchemes or security, and no OAuth/OIDC discovery
+    document exists on either host. Access to the one functional operation (POST /) is gated by PAYMENT, not
+    identity: an unpaid call returns HTTP 402 with x402 v2 PaymentRequirements and the retry carries a
+    PAYMENT-SIGNATURE header proving settlement of 0.01 RLUSD on the XRP Ledger through the t54 facilitator.
+    The four GET routes (both card paths, the x402 manifest, /healthz) are free and anonymous.
+schemes: []
+payment_gate:
+  name: x402
+  standard: x402 v2 (HTTP 402 payment challenge)
+  request_header: PAYMENT-SIGNATURE
+  challenge_header: PAYMENT-REQUIRED (base64 JSON PaymentRequirements; the same object is the 402 body)
+  observed: 'GET and POST https://oracle.evebrief.org/ without the header -> 402, body error "PAYMENT-SIGNATURE header is required", fresh invoiceId per challenge (2026-09-19)'
+  requirements:
+    scheme: exact
+    network: 'xrpl:0 (XRP Ledger mainnet)'
+    asset: RLUSD (hex 524C555344000000000000000000000000000000)
+    issuer: rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De
+    amount: '0.01'
+    pay_to: rH2tcNh56xoLUssRubra7DSDCgrReSZodW
+    facilitator: https://xrpl-facilitator-mainnet.t54.ai
+    max_timeout_seconds: 600
+  applies_to: [jsonrpc__post]
+  free_operations: [agent_card__well_known_agent_json_get, agent_card_alt__well_known_agent_card_json_get, x402_manifest__well_known_x402_get, healthz_healthz_get]
+  sources:
+  - a2a/evebrief-org-agent-card.json (capabilities.extensions[0], required true)
+  - well-known/evebrief-org-x402.json
+  - errors/evebrief-org-problem-types.yml (the observed 402)
+  note: >-
+    Recorded as a payment gate rather than an apiKey scheme on purpose: PAYMENT-SIGNATURE is not a static
+    credential a caller holds, it is a per-invoice proof of settlement, and modelling it as an API key would
+    tell an agent to go looking for a key that is never issued. No identity, no account, no scopes.
+discovery:
+- {url: 'https://oracle.evebrief.org/.well-known/oauth-authorization-server', status: 404}
+- {url: 'https://oracle.evebrief.org/.well-known/oauth-protected-resource', status: 404}
+- {url: 'https://oracle.evebrief.org/.well-known/openid-configuration', status: 404}
+- {url: 'https://evebrief.org/.well-known/oauth-authorization-server', status: 404}
+- {url: 'https://evebrief.org/.well-known/openid-configuration', status: 404}

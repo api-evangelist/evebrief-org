@@ -1,23 +1,151 @@
 aid: evebrief-org
 name: openclaw / evm-lab
-description: 'openclaw / evm-lab is a company surfaced via the API Evangelist harvest backlog (source:
-  a2a-registry) and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  openclaw / evm-lab is the operator name on an A2A agent card served from oracle.evebrief.org, a subdomain of
+  evebrief.org. The apex site is EveBrief, a waitlist-stage market and competitor intelligence briefing product
+  for boutique agencies and independent consultants (indicative tiers Free / $19 / $39 a month; no API of its
+  own). The oracle subdomain runs onchain-risk-oracle: a pay-per-task agent that checks an EVM address (eth,
+  base, bsc, arb, op, polygon) against a curated rug-pull feed (114,110 records at probe time) and returns a
+  none / low / high / critical risk verdict with labels, reasons and evidence. It is published as an A2A 0.3.0
+  JSON-RPC agent at https://oracle.evebrief.org/ (agent card at /.well-known/agent-card.json and the legacy
+  /.well-known/agent.json), gated by x402 v2 payment of 0.01 RLUSD on the XRP Ledger mainnet through the t54
+  facilitator, and described by a FastAPI-generated OpenAPI 3.1.0 at /openapi.json with Swagger UI at /docs and
+  ReDoc at /redoc. The card's provider.url credits the OpenClaw open-source agent framework
+  (github.com/openclaw/openclaw); that organization is the software the agent runs on, not this operator.
 url: https://raw.githubusercontent.com/api-evangelist/evebrief-org/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:a2a-registry
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-09-19 (local-v3; was a2a-registry harvest stub)
 specificationVersion: '0.20'
 created: '2026-09-19'
 modified: '2026-09-19'
 tags:
-- Company
-apis: []
+- Agents
+- A2A
+- x402
+- XRPL
+- Blockchain
+- DeFi
+- EVM
+- Security
+- Fraud Detection
+- Risk
+- agent-native
+- Market Intelligence
+tags_raw:
+- Agents
+- A2A
+- x402
+- XRPL
+- Blockchain
+- DeFi
+- EVM
+- Security
+- Fraud detection
+- Risk
+- Agent-native
+- Market intelligence
+apis:
+- aid: evebrief-org:onchain-risk-oracle-api
+  name: onchain-risk-oracle API
+  description: >-
+    The FastAPI-generated OpenAPI 3.1.0 contract (info.title onchain-risk-oracle, version 0.1.0) for the
+    oracle host: five routes — GET /.well-known/agent.json and /.well-known/agent-card.json (the A2A card),
+    GET /.well-known/x402 (the x402 v2 resource-server manifest), GET /healthz (status, payment_mode,
+    feed_records, feed_latest_ts) and POST / (the JSON-RPC task endpoint). The contract declares no servers[],
+    no securitySchemes, no request or response schemas and no 4xx responses; the real parameter contract is
+    the skill inputSchema/outputSchema in the agent card. Every POST to / is a paid x402 task (0.01 RLUSD on
+    XRPL) and answers HTTP 402 with PaymentRequirements until a PAYMENT-SIGNATURE header is supplied.
+  humanURL: https://oracle.evebrief.org/docs
+  baseURL: https://oracle.evebrief.org
+  tags:
+  - Agents
+  - x402
+  - EVM
+  - Security
+  - Risk
+  properties:
+  - type: OpenAPI
+    url: openapi/evebrief-org-openapi.json
+  - type: OpenAPI
+    name: onchain-risk-oracle OpenAPI (provider-hosted)
+    url: https://oracle.evebrief.org/openapi.json
+  - type: Documentation
+    url: https://oracle.evebrief.org/docs
+  - type: APIReference
+    url: https://oracle.evebrief.org/redoc
+  - type: Overlay
+    url: overlays/evebrief-org-openapi-overlay.yaml
+- aid: evebrief-org:onchain-risk-oracle-a2a-agent
+  name: onchain-risk-oracle A2A Agent
+  description: >-
+    Agent2Agent (A2A) protocol surface: an agent card at https://oracle.evebrief.org/.well-known/agent-card.json
+    (protocolVersion 0.3.0, JSONRPC transport, version 0.1.0, provider "openclaw / evm-lab") advertising one
+    skill, onchain-risk-check — send an EVM address (optionally chain, deep, fork) and receive a structured
+    risk verdict (none / low / high / critical) with labels, reasons, evidence and sources. The JSON-RPC
+    endpoint is the host root, https://oracle.evebrief.org/; the card declares the x402 payment extension as
+    REQUIRED (exact scheme, network xrpl:0, asset RLUSD, amount 0.01, facilitator
+    xrpl-facilitator-mainnet.t54.ai) and both GET and POST on the endpoint return HTTP 402 with x402 v2
+    PaymentRequirements until paid. Streaming, push notifications and state-transition history are declared
+    unsupported.
+  humanURL: https://oracle.evebrief.org/.well-known/agent-card.json
+  baseURL: https://oracle.evebrief.org/
+  tags:
+  - A2A
+  - agent-native
+  - x402
+  - XRPL
+  properties:
+  - type: AgentCard
+    url: a2a/evebrief-org-a2a.yml
+  - type: AgentCard
+    name: A2A Agent Card (provider-hosted)
+    url: https://oracle.evebrief.org/.well-known/agent-card.json
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/evebrief-org-agentic-access.yml
+- type: DomainSecurity
+  url: security/evebrief-org-domain-security.yml
+- type: Authentication
+  url: authentication/evebrief-org-authentication.yml
 - type: Website
   url: https://evebrief.org/
+- type: Blog
+  url: https://evebrief.org/blog/
+- type: Documentation
+  url: https://oracle.evebrief.org/docs
+- type: APIReference
+  url: https://oracle.evebrief.org/redoc
+- type: AgentCard
+  url: a2a/evebrief-org-a2a.yml
+- type: WellKnown
+  url: well-known/evebrief-org-well-known.yml
+- type: LLMsTxt
+  url: llms/evebrief-org-llms.txt
+- type: Conformance
+  url: conformance/evebrief-org-conformance.yml
+- type: Conventions
+  url: conventions/evebrief-org-conventions.yml
+- type: ErrorCatalog
+  url: errors/evebrief-org-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/evebrief-org-lifecycle.yml
+- type: RateLimits
+  url: rate-limits/evebrief-org-rate-limits.yml
+- type: Plans
+  url: plans/evebrief-org-plans-pricing.yml
+- type: DataModel
+  url: data-model/evebrief-org-data-model.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-09-19'
+  status: enriched
+  artifacts_added: 22
+  pass: local-v3

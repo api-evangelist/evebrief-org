@@ -1,0 +1,7 @@
+generated: '2026-09-19'
+method: generated
+skills:
+- file: evebrief-org-onchain-risk-check.md
+  name: Check an EVM address for rug-pull risk (paid, A2A + x402 on XRPL)
+  api: openapi/evebrief-org-openapi.json
+  operations: [x402_manifest__well_known_x402_get, healthz_healthz_get, jsonrpc__post]

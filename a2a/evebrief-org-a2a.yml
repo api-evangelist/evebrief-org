@@ -1,0 +1,174 @@
+generated: '2026-09-19'
+method: probed
+source: https://oracle.evebrief.org/.well-known/agent-card.json
+card:
+  file: a2a/evebrief-org-agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: oracle.evebrief.org
+  note: >-
+    Served from oracle.evebrief.org, a subdomain of the record's registrable domain evebrief.org, NOT from the
+    apex: https://evebrief.org/.well-known/agent-card.json and /.well-known/agent.json both return a real
+    Cloudflare Pages 404 (0 bytes). On the oracle host the canonical path and the legacy /.well-known/agent.json
+    both answer 200 with byte-identical bodies (2,655 bytes; cmp reports no difference) — the FastAPI contract
+    at /openapi.json declares both routes (operationIds agent_card__well_known_agent_json_get and
+    agent_card_alt__well_known_agent_card_json_get). A negative-control path
+    (/.well-known/apievangelist-negative-control-7f3a9c.json) returns the app's JSON 404 ({"detail":"Not
+    Found"}, 22 bytes), so the 200s are served documents and not a catch-all. Ownership: the card's url is
+    https://oracle.evebrief.org/, the x402 manifest on the same host names the same resource URL, the
+    OpenAPI info.title is the card's name, both hosts resolve to the same Cloudflare addresses, and the
+    certificate's SAN is evebrief.org + *.evebrief.org. The card's provider.url
+    (https://github.com/openclaw/openclaw) points at the OpenClaw open-source assistant framework, which is
+    a credit to the software the agent runs on, not a different owner of this host; the provider.organization
+    string "openclaw / evm-lab" is the only operator name published anywhere on either host.
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://oracle.evebrief.org/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  body_bytes: 2655
+  body_parses_as: JSON object with AgentCard shape (protocolVersion, name, description, url, preferredTransport, version, provider, capabilities, defaultInputModes, defaultOutputModes, skills)
+  corroborating_probes:
+  - url: https://oracle.evebrief.org/.well-known/agent.json
+    http_status: 200
+    note: Legacy pre-0.3 path; body byte-identical to the canonical path.
+  - url: https://evebrief.org/.well-known/agent-card.json
+    http_status: 404
+  - url: https://evebrief.org/.well-known/agent.json
+    http_status: 404
+  - url: https://oracle.evebrief.org/.well-known/apievangelist-negative-control-7f3a9c.json
+    http_status: 404
+    note: Negative control; the app returns {"detail":"Not Found"} for unknown paths.
+  - url: https://oracle.evebrief.org/
+    method: GET
+    http_status: 402
+    note: The card's declared url. Answers x402 v2 PaymentRequirements (PAYMENT-REQUIRED header + JSON body, error "PAYMENT-SIGNATURE header is required") before any JSON-RPC handling.
+  - url: https://oracle.evebrief.org/
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tasks/get","params":{"id":"apievangelist-nonexistent-probe"}}'
+    http_status: 402
+    note: >-
+      The JSON-RPC layer is unreachable without payment: an unknown task id returns the x402 challenge
+      (fresh invoiceId per request) rather than the A2A -32001 TaskNotFound error, so JSON-RPC conformance
+      of the endpoint could not be observed anonymously. No payment was made and no task was sent.
+  - url: https://oracle.evebrief.org/.well-known/x402
+    http_status: 200
+    note: x402 v2 resource-server manifest naming the same resource URL, price and facilitator as the card's extension params; saved to well-known/evebrief-org-x402.json.
+  - url: https://xrpl-facilitator-mainnet.t54.ai/supported
+    http_status: 200
+    note: 'The facilitator the card names is live and advertises exactly the kind the card requires: {"x402Version":2,"scheme":"exact","network":"xrpl:0"}.'
+  - url: https://x402.org/extensions/payment/v1
+    http_status: 404
+    note: The extension URI the card declares does not resolve to a specification (x402.org serves its HTML 404 page, 55 KB).
+  - url: https://a2aregistry.org
+    note: The card was first seen as one of 415 agents listed on a2aregistry.org (fetched 2026-09-19, author "openclaw / evm-lab", card URL the legacy /.well-known/agent.json), which is how this operator entered the harvest backlog. The registry listing was the lead; the card above was fetched directly from the operator's host.
+agent_card:
+  name: onchain-risk-oracle
+  description: >-
+    (German) On-chain risk check for EVM addresses. Checks an address against a curated rug-pull feed (known
+    rug tokens, their deployers, rug beneficiaries, funding sources and rug-factory hubs) and returns a
+    structured risk verdict with evidence.
+  description_language: de
+  url: https://oracle.evebrief.org/
+  version: 0.1.0
+  protocol_version: 0.3.0
+  preferred_transport: JSONRPC
+  provider:
+    organization: openclaw / evm-lab
+    url: https://github.com/openclaw/openclaw
+  capabilities:
+    streaming: false
+    push_notifications: false
+    state_transition_history: false
+    extensions:
+    - uri: https://x402.org/extensions/payment/v1
+      description: Payment per task via x402 (HTTP 402).
+      required: true
+      params: {scheme: exact, network: 'xrpl:0', asset: RLUSD, amount: '0.01', payTo: rH2tcNh56xoLUssRubra7DSDCgrReSZodW, issuer: rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De, facilitator: 'https://xrpl-facilitator-mainnet.t54.ai', maxTimeoutSeconds: 600, resource: /, mode: xrpl}
+  default_input_modes: [application/json, text/plain]
+  default_output_modes: [application/json]
+  security_schemes: null
+  security: null
+  documentation_url: null
+  icon_url: null
+  skill_count: 1
+  skills:
+  - id: onchain-risk-check
+    name: On-Chain-Risk-Check
+    tags: [security, forensics, evm, rug-pull, risk, defi]
+    input: 'address (required, ^0x[0-9a-fA-F]{40}$); chain (eth|base|bsc|arb|op|polygon, optional); deep (bool, live evm-lab heuristics, "more expensive/slower"); fork (bool, with deep: anvil-fork owner-privilege checks)'
+    output: 'address, risk (none|low|high|critical), labels[], reasons[], evidence{}, live_tier{}, feed{}, sources[], disclaimer'
+    examples:
+    - 'Prüfe 0x0FB30397F744F9121C4902CBAed078AFAd9B8888 auf base'
+    - '{"address": "0xb8c6ff50ea596671871784018a2030fe1852291a", "chain": "base"}'
+  skill_invocation: >-
+    One skill, invoked by sending the address (as JSON or plain text) to the JSON-RPC endpoint at the card's
+    url; every task is a paid task under the required x402 extension (0.01 RLUSD on XRPL mainnet). The
+    skill's inputSchema is the only parameter contract published anywhere — the OpenAPI's POST / declares
+    no request body.
+conformance:
+  spec: A2A 1.0.0
+  grade: conformant
+  protocol_version: '0.3.0'
+  preferred_transport: JSONRPC
+  hard_checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    skills_is_array: true
+  optional_fields:
+    default_input_modes: true
+    default_output_modes: true
+    preferred_transport: true
+  grade_basis: >-
+    Graded against the A2A 1.0.0 hard checks. capabilities is an OBJECT (pass) carrying streaming,
+    pushNotifications, stateTransitionHistory and an extensions[] array. protocolVersion is present at the top
+    level (pass), declared "0.3.0". skills is an ARRAY (pass) of one fully-populated skill with id, name,
+    description, tags, examples, inputModes and outputModes. All three optional discriminators are present:
+    preferredTransport (JSONRPC), defaultInputModes (application/json, text/plain) and defaultOutputModes
+    (application/json). A 0.3.0-shaped card (top-level url + preferredTransport + protocolVersion, no
+    supportedInterfaces[]), internally consistent with the revision it declares.
+  deviations:
+  - field: protocolVersion / url / preferredTransport
+    observed: 0.3.0 top-level triple; no supportedInterfaces[] or additionalInterfaces[]
+    note: Valid for A2A 0.3.0, which the card declares. A reader written against A2A 1.0.0 looks for supportedInterfaces[].protocolBinding and will not find it. Recorded because both shapes coexist in the catalog, not as a fault.
+  - field: securitySchemes / security
+    observed: absent
+    note: >-
+      No authentication scheme is declared. Access control is economic: the only gate is the required x402
+      payment extension, and a GET or POST to the card's url without a PAYMENT-SIGNATURE header returns 402.
+      An agent reading securitySchemes learns nothing; it has to read capabilities.extensions[0].
+  - field: capabilities.extensions[0].uri
+    observed: https://x402.org/extensions/payment/v1 (HTTP 404 on fetch)
+    note: >-
+      The declared extension URI resolves to nothing, and it differs from the a2a-x402 extension URI other
+      x402-paying cards in the catalog declare (https://github.com/google-a2a/a2a-x402/v0.1). The params block
+      is self-describing enough to pay (scheme, network, asset, amount, payTo, issuer, facilitator), but an
+      A2A client cannot dereference the extension to learn its semantics.
+  - field: capabilities.extensions[0].params.network
+    observed: 'xrpl:0 (XRP Ledger mainnet), asset RLUSD'
+    note: Settlement is on the XRP Ledger while the skill analyses EVM chains (eth, base, bsc, arb, op, polygon). Not a fault; recorded because an EVM-native agent wallet cannot pay this card without an XRPL wallet and RLUSD.
+  - field: skills[0].inputSchema / outputSchema
+    observed: present
+    note: Not fields of the A2A AgentSkill object; a provider extension. They are the most useful thing in the card — the only machine-readable parameter contract for the task — and are carried into the derived data model and the agent skill in this repo.
+  - field: provider.url
+    observed: https://github.com/openclaw/openclaw
+    note: Points at the OpenClaw open-source assistant framework (openclaw.ai, 92 public repositories, 390k stars), not at a page about this operator. The operator's own web presence is the EveBrief site on the apex domain, which does not mention the oracle.
+  - field: description / skill descriptions
+    observed: German
+    note: The apex site, the OpenAPI summaries and the x402 manifest description are English or mixed; the card prose is German. Recorded for agents that filter by language.
+  - field: documentationUrl / iconUrl / signatures
+    observed: absent
+    note: No documentation link (Swagger UI at https://oracle.evebrief.org/docs and ReDoc at /redoc exist but are not referenced) and no JWS signature block, so the card's authenticity rests on TLS to oracle.evebrief.org.
+  - field: url
+    observed: https://oracle.evebrief.org/ (the host root)
+    note: The JSON-RPC endpoint, the x402 resource and the card's url are the same URL, and a plain GET on it returns the 402 challenge rather than a JSON-RPC response — there is no unpaid method (no tasks/get on an unknown id, no agent/getAuthenticatedExtendedCard) to confirm the transport anonymously.
+surface_relationship:
+  note: >-
+    One agent, one paid skill, one host. The A2A JSON-RPC endpoint (POST https://oracle.evebrief.org/) is the
+    only functional operation; the OpenAPI at /openapi.json is the FastAPI-generated contract for the same
+    app and lists five routes — the two card paths, the x402 manifest, /healthz and the JSON-RPC POST — with
+    no request or response schemas. There is no MCP server, no GraphQL and no REST projection of the skill:
+    an agent that cannot speak A2A + x402 on XRPL cannot use this service. See mcp/evebrief-org-mcp.yml for
+    the derived (candidate, unshipped) MCP mapping and conformance/evebrief-org-conformance.yml for the
+    protocol stack.

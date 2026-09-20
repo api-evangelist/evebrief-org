@@ -1,0 +1,109 @@
+generated: '2026-09-19'
+method: searched
+source: https://oracle.evebrief.org/.well-known/agent-card.json
+derived_from: openapi/evebrief-org-openapi.json
+docs:
+- https://oracle.evebrief.org/docs
+- https://oracle.evebrief.org/.well-known/x402
+base_url: https://oracle.evebrief.org
+media_type: application/json
+surface_shape: >-
+  A single paid, read-only query behind an A2A JSON-RPC endpoint at the host root. There are no resources,
+  no collections and no state the caller owns; every call is an analysis of an EVM address against the
+  provider's rug-pull feed. The four GET routes (two card paths, the x402 manifest, /healthz) are free and
+  unauthenticated. The conventions below are therefore mostly "not applicable", and na is the honest value:
+  a read-only surface is not deficient for lacking idempotency keys or reversal operations.
+auth:
+  style: >-
+    None in the credential sense. No API key, no bearer token, no OAuth. The gate is payment: a POST (or GET)
+    to / without a PAYMENT-SIGNATURE header returns HTTP 402 with x402 v2 PaymentRequirements (one accepts[]
+    entry — exact scheme, network xrpl:0, 0.01 RLUSD to rH2tcNh56xoLUssRubra7DSDCgrReSZodW, issuer
+    rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De, maxTimeoutSeconds 600, a per-request invoiceId) and the retry carries
+    the signed payment in that header. The facilitator is https://xrpl-facilitator-mainnet.t54.ai.
+  detail: authentication/evebrief-org-authentication.yml
+idempotency:
+  supported: false
+  coverage: na
+  mechanism: null
+  header: null
+  scope: []
+  retention: undocumented
+  write_surface: none
+  description: >-
+    The API mutates nothing: the only operation is a paid risk check, so idempotency of provider state is not
+    applicable. What an agent should know instead is that each accepted call is a separate payment. The 402
+    challenge carries a fresh invoiceId and a maxTimeoutSeconds of 600, so a retry after an ambiguous outcome
+    is a second 0.01 RLUSD task, not a replay of the first; nothing on the endpoint documents a way to
+    re-fetch a paid result.
+dry_run_mode:
+  supported: false
+  status: na
+  note: >-
+    No free or sandbox variant of the check is published; the skill's deep and fork flags change depth and
+    cost ("more expensive/slower"), not whether the call is charged. /healthz (free) reports the feed size and
+    freshness (feed_records 114110, feed_latest_ts 2026-09-19T23:20:48+00:00 at probe) and is the only
+    pre-flight available.
+reversibility:
+  grade: na
+  write_surface: none
+  note: >-
+    Read-only analysis; there is nothing to reverse on the provider side. The payment leg is an on-ledger
+    RLUSD transfer on the XRP Ledger settled through the facilitator; no refund policy, dispute channel or
+    window is published on either host, and none is asserted here.
+pagination:
+  style: none
+  note: No list operations.
+filtering_and_sorting:
+  supported: false
+field_expansion:
+  supported: false
+sparse_fieldsets:
+  supported: false
+metadata:
+  supported: false
+request_id_tracing:
+  supported: false
+  note: >-
+    No request-id header is declared or returned. Responses carry cf-ray (Cloudflare's trace id). The x402
+    challenge carries an invoiceId per request, which is the closest thing to a correlation id an agent will
+    see, and it belongs to the payment, not the task.
+versioning:
+  scheme: unversioned paths; info.version and card version 0.1.0
+  detail: lifecycle/evebrief-org-lifecycle.yml
+errors:
+  envelope: 'FastAPI {"detail": string} on 404; x402 PaymentRequirements object on 402 — not RFC 9457'
+  media_type: application/json
+  json_rpc: JSON-RPC 2.0 error objects declared by transport but not observable behind the 402 gate
+  detail: errors/evebrief-org-problem-types.yml
+rate_limit_signaling:
+  exhaustion_status: undocumented
+  headers: []
+  note: No rate-limit headers were returned on any response and none are documented. See rate-limits/evebrief-org-rate-limits.yml.
+payment:
+  protocol: x402
+  version: 2
+  asset: RLUSD (XRPL issued currency, hex 524C555344000000000000000000000000000000, issuer rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De)
+  network: 'xrpl:0 (XRP Ledger mainnet)'
+  amount_per_task: '0.01'
+  pay_to: rH2tcNh56xoLUssRubra7DSDCgrReSZodW
+  facilitator: https://xrpl-facilitator-mainnet.t54.ai
+  max_timeout_seconds: 600
+  flow: >-
+    Call POST /; receive 402 with PaymentRequirements in both the PAYMENT-REQUIRED header (base64 JSON) and
+    the body; settle the exact amount through the facilitator; retry the same call with the PAYMENT-SIGNATURE
+    header. The manifest at /.well-known/x402 publishes the same requirements ahead of the call so an agent
+    can decide before it is challenged.
+  attestation: none (per the manifest)
+input_contract:
+  source: a2a/evebrief-org-agent-card.json skills[0].inputSchema
+  fields:
+  - {name: address, type: string, required: true, pattern: '^0x[0-9a-fA-F]{40}$', description: EVM address (token, wallet or contract)}
+  - {name: chain, type: string, enum: [eth, base, bsc, arb, op, polygon], required: false, description: chain short code; optional, improves attribution}
+  - {name: deep, type: boolean, default: false, description: 'also run live heuristics (evm-lab) — more expensive/slower'}
+  - {name: fork, type: boolean, default: false, description: 'with deep=true: anvil-fork checks (owner privileges)'}
+  input_modes: [application/json, text/plain]
+output_contract:
+  source: a2a/evebrief-org-agent-card.json skills[0].outputSchema
+  required: [address, risk, labels, reasons, evidence, sources]
+  risk_enum: [none, low, high, critical]
+  optional: [live_tier, feed, disclaimer]

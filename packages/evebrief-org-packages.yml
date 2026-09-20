@@ -1,0 +1,17 @@
+generated: '2026-09-19'
+method: searched
+source: registry searches 2026-09-19
+package_count: 0
+packages: []
+searched:
+- {registry: npm, query: 'https://registry.npmjs.org/-/v1/search?text=evebrief', result: 0 packages}
+- {registry: npm, query: 'https://registry.npmjs.org/evebrief', status: 404}
+- {registry: pypi, query: 'https://pypi.org/pypi/evebrief/json', status: 404}
+- {registry: pypi, query: 'https://pypi.org/pypi/onchain-risk-oracle/json', status: 404}
+- {registry: github, query: 'https://api.github.com/search/repositories?q=evebrief', result: 0 repositories}
+- {registry: github, query: 'https://api.github.com/search/repositories?q=onchain-risk-oracle', result: '9 repositories, none by this operator and none referencing evebrief.org (e.g. devsiddharthsudhir/onchain-risk-oracle, RuthChisom/risk-oracle) — not linked'}
+- {registry: github-org, query: 'https://api.github.com/orgs/openclaw', result: 'The card''s provider.url org: OpenClaw, "Your personal, open source AI assistant", openclaw.ai, 92 public repos, openclaw/openclaw 390k stars. This is the agent FRAMEWORK the oracle is built on, not the operator''s org, and no repository in it names evebrief or evm-lab; not recorded as this provider''s GitHub organization.'}
+note: >-
+  No client library, CLI or SDK is published in any registry searched and neither host references one; the
+  documented way in is A2A JSON-RPC with x402 payment, plus a generic A2A client. No Packages or SDKs pointer
+  is emitted.

@@ -1,0 +1,37 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+source: https://evebrief.org/
+signals: {}
+summary: >-
+  No horizontal-regulatory signal is published on either host. The apex evebrief.org is a two-page static
+  site (landing + blog) with a waitlist email form and no terms of service, no privacy policy, no legal or
+  imprint page and no accessibility statement; the oracle host serves only the agent card, the x402 manifest,
+  the OpenAPI and a health endpoint. The agent card's disclaimer field in the skill outputSchema is the only
+  place a disclosure could travel, and it is a runtime response field, not a published statement. An empty
+  signals block is the measurement. Which regimes reach this operator is decided by the Kin Score regime map,
+  not here.
+probed:
+- {url: 'https://evebrief.org/accessibility', status: 404}
+- {url: 'https://evebrief.org/accessibility/vpat', status: 404}
+- {url: 'https://evebrief.org/legal/subprocessors', status: 404}
+- {url: 'https://evebrief.org/legal/dpa', status: 404}
+- {url: 'https://evebrief.org/privacy/requests', status: 404}
+- {url: 'https://evebrief.org/privacy', status: 404}
+- {url: 'https://evebrief.org/terms', status: 404}
+- {url: 'https://evebrief.org/legal', status: 404}
+- {url: 'https://evebrief.org/imprint', status: 404}
+- {url: 'https://evebrief.org/impressum', status: 404}
+- {url: 'https://evebrief.org/transparency', status: 404}
+- {url: 'https://evebrief.org/security', status: 404}
+- {url: 'https://evebrief.org/security/sbom', status: 404}
+- {url: 'https://evebrief.org/docs/data-residency', status: 404}
+- {url: 'https://evebrief.org/ai/transparency', status: 404}
+- {url: 'https://evebrief.org/legal/report-content', status: 404}
+- {url: 'https://evebrief.org/.well-known/security.txt', status: 404}
+- {url: 'https://oracle.evebrief.org/.well-known/security.txt', status: 404}
+- {url: 'https://evebrief.org/sitemap.xml', status: 200, note: 'Six URLs: /, /blog/ and four posts. No legal pages exist to be listed.'}
+- {url: 'https://evebrief.org/', status: 200, note: 'Landing page: waitlist email form with a honeypot field; fine print "No spam, unsubscribe anytime"; footer links Blog and mailto:hello@evebrief.org; no privacy or terms link. A commented-out Cloudflare Web Analytics beacon ("Cookie-free").'}
+observations:
+- The waitlist form collects email addresses with no linked privacy notice — recorded as an observation, not as a signal or a finding about any regime.
+- 'The card prose is German and the apex is English; no country, imprint or operator address is published on either host, so jurisdiction cannot be read from the surface.'

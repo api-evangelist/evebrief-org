@@ -1,0 +1,44 @@
+generated: '2026-09-19'
+method: probed
+source: https://oracle.evebrief.org/.well-known/x402
+docs:
+- https://oracle.evebrief.org/.well-known/agent-card.json
+- https://oracle.evebrief.org/
+plan_count: 1
+currency: RLUSD
+model: pay-per-task in RLUSD on the XRP Ledger via x402; no subscription, no account, no free tier for the task itself
+summary: >-
+  The oracle publishes exactly one price and publishes it machine-readably three times over: in the agent
+  card's required payment extension, in the x402 resource-server manifest at /.well-known/x402, and in the
+  live 402 PaymentRequirements the endpoint returns to any unpaid call. 0.01 RLUSD per task, exact scheme,
+  settled on XRP Ledger mainnet (xrpl:0) through the t54 facilitator, with a 600-second window per challenge.
+  The card's inputSchema says deep=true is "more expensive/slower", but no second price is published anywhere,
+  so no deep-tier price is recorded. The free surface is the card, the manifest, the OpenAPI, the Swagger UI
+  and /healthz.
+plans:
+- id: per-task
+  name: On-Chain-Risk-Check (per task)
+  price: 0.01
+  currency: RLUSD
+  period: per task
+  network: 'xrpl:0 (XRP Ledger mainnet)'
+  scheme: exact
+  pay_to: rH2tcNh56xoLUssRubra7DSDCgrReSZodW
+  issuer: rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De
+  facilitator: https://xrpl-facilitator-mainnet.t54.ai
+  max_timeout_seconds: 600
+  included: one risk verdict per payment
+  overage: null
+  limits: ['address must match ^0x[0-9a-fA-F]{40}$', 'chain one of eth, base, bsc, arb, op, polygon (optional)', 'deep/fork flags stated as more expensive but not separately priced']
+  evidence:
+  - {url: 'https://oracle.evebrief.org/.well-known/x402', status: 200, field: 'resources[0].accepts[0].amount'}
+  - {url: 'https://oracle.evebrief.org/.well-known/agent-card.json', status: 200, field: 'capabilities.extensions[0].params.amount'}
+  - {url: 'https://oracle.evebrief.org/', status: 402, field: 'accepts[0].amount'}
+related_product_pricing:
+  note: >-
+    The apex site publishes indicative tiers for EveBrief, the operator's market-briefing product, which has
+    no API and is not this surface: Free ($0, 3 sources, weekly digest), Solo ($19/mo, 15 sources, daily digest
+    + alerts), Pro ($39/mo, 40 sources, 3 projects, shareable web digest, Slack). Marked "Indicative. Waitlist
+    members lock in launch pricing." Recorded for context only; not counted in plan_count.
+  url: https://evebrief.org/
+  status: 200

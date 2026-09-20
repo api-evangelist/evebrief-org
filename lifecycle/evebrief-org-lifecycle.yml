@@ -1,0 +1,49 @@
+generated: '2026-09-19'
+method: searched
+source: https://oracle.evebrief.org/openapi.json
+derived_from: openapi/evebrief-org-openapi.json
+docs:
+- https://oracle.evebrief.org/.well-known/agent-card.json
+- https://evebrief.org/blog/
+versioning:
+  scheme: unversioned paths; version carried in the document and the card
+  current_version: 0.1.0 (OpenAPI info.version and agent card version agree)
+  spec_url: https://oracle.evebrief.org/openapi.json
+  base_url: https://oracle.evebrief.org
+  policy_published: false
+  note: >-
+    Paths carry no version segment and no version header is documented. 0.1.0 on both the contract and the
+    card reads as a first public release. The x402 manifest carries an updated timestamp that is regenerated
+    on every request, so it is not a publication date.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  note: >-
+    Zero operations carry deprecated: true. No deprecation or versioning policy page exists on either host
+    (/changelog 404, /status 404, /docs on the apex 404). The legacy /.well-known/agent.json path is still
+    served alongside the canonical one, which is the only backward-compatibility behaviour observed. No
+    Deprecation pointer is emitted.
+status_page:
+  url: null
+  probed: [{url: 'https://evebrief.org/status', status: 404}]
+  live_signal:
+    url: https://oracle.evebrief.org/healthz
+    status: 200
+    observed: '{"status":"ok","payment_mode":"xrpl","feed_records":114110,"feed_latest_ts":"2026-09-19T23:20:48+00:00"}'
+    note: >-
+      A health endpoint, not a status page: it reports process status and the risk feed's record count and
+      freshness, with no incident history and no uptime commitment. No StatusPage pointer is emitted.
+sla:
+  published: false
+  note: No uptime target, support commitment or refund terms are published on either host.
+changelog:
+  published: false
+  probed: [{url: 'https://evebrief.org/changelog', status: 404}]
+  dated_signals:
+  - {date: '2026-09-02', what: 'All four EveBrief blog posts published (apex blog index); the newest content on the apex domain'}
+  - {date: '2026-09-02', what: 'TLS certificate issued for evebrief.org / *.evebrief.org (Google Trust Services WE1, notBefore 2026-09-02, notAfter 2026-12-01)'}
+  - {date: '2026-09-19', what: 'Agent card first observed on a2aregistry.org (415-agent snapshot) and profiled here; feed_latest_ts on /healthz was the probe minute, so the feed is continuously updated'}
+  note: No changelog artifact is written; the dated signals above are the only change history either host exposes.

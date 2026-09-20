@@ -1,0 +1,122 @@
+generated: '2026-09-19'
+method: probed
+source: >-
+  Live GET probes of the named /.well-known/* path list on evebrief.org and oracle.evebrief.org, 2026-09-19.
+  Every row below is a request that was actually issued; every status is the one returned.
+summary:
+  hosts_probed: 2
+  hosts_unresolvable: [www.evebrief.org, api.evebrief.org, mcp.evebrief.org]
+  paths_probed: 34
+  documents_served: 3
+  hit_count: 3
+  path_echo_control: passed
+  note: >-
+    Two hosts, two very different surfaces. The apex evebrief.org is a static Cloudflare Pages site (the
+    EveBrief briefing product) and serves NOTHING under /.well-known/ — every path is a 0-byte 404, including
+    security.txt at both locations and APIs.json at all three. The oracle.evebrief.org subdomain is a FastAPI
+    app and serves exactly three well-known documents: the A2A agent card at the canonical path, the same
+    card byte-for-byte at the legacy /.well-known/agent.json, and an x402 v2 resource-server manifest at
+    /.well-known/x402 (not on the contract's named list; recorded because the OpenAPI declares the route and
+    it is the payment contract for the only operation). Every other named path on the oracle host returns the
+    app's JSON 404 ({"detail":"Not Found"}, 22 bytes) and a negative-control path 404s the same way, so the
+    200s are served documents. No security.txt, no OAuth/OIDC discovery, no RFC 9728 protected-resource
+    metadata, no RFC 9727 API catalog, no APIs.json, no AAuth, no ai-plugin, no UCP/ACP manifest on either
+    host. There is no MCP host to probe (no MCP server exists; mcp.evebrief.org does not resolve).
+hosts:
+- host: oracle.evebrief.org
+  role: A2A JSON-RPC endpoint, x402 resource server and OpenAPI host — the only API host
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/json
+    bytes: 2655
+    file: ../a2a/evebrief-org-agent-card.json
+    standard: A2A Agent Card (protocolVersion 0.3.0)
+    note: Saved verbatim under a2a/ and graded in a2a/evebrief-org-a2a.yml (conformant).
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    bytes: 2655
+    file: ../a2a/evebrief-org-agent-card.json
+    standard: A2A Agent Card (legacy pre-0.3 path)
+    note: Byte-identical to the canonical path (cmp shows no difference); one file kept.
+  - path: /.well-known/x402
+    status: 200
+    content_type: application/json
+    bytes: 662
+    file: evebrief-org-x402.json
+    standard: x402 v2 resource-server manifest
+    note: 'kind resource-server; one resource (POST https://oracle.evebrief.org/), accepts exact/xrpl:0/RLUSD/0.01, facilitator https://xrpl-facilitator-mainnet.t54.ai, attestation none, docs -> the legacy agent.json path. The updated timestamp is regenerated per request.'
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    note: This host is the x402 resource server; it publishes no RFC 9728 metadata because it uses no OAuth at all.
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/api-catalog.json
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/apievangelist-negative-control-7f3a9c.json
+    status: 404
+    note: Negative control — {"detail":"Not Found"}; confirms the 200s above are not a catch-all.
+- host: evebrief.org
+  role: Website (static Cloudflare Pages; EveBrief product landing + blog). No API.
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/api-catalog.json
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/x402
+    status: 404
+  - path: /robots.txt
+    status: 200
+    content_type: text/plain
+    note: 'Allow: / for all agents, Disallow: /api/ (a path that itself 404s), Sitemap: https://evebrief.org/sitemap.xml. Not a well-known document; recorded as the only machine-readable file the apex serves.'

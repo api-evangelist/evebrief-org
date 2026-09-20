@@ -1,0 +1,20 @@
+generated: '2026-09-19'
+method: probed
+source: https://oracle.evebrief.org/
+docs:
+- https://oracle.evebrief.org/docs
+- https://oracle.evebrief.org/.well-known/x402
+limit_count: 0
+summary: >-
+  No rate limits are documented anywhere on either host, and no rate-limit headers (X-RateLimit-*,
+  RateLimit-*, Retry-After) were returned on any of the responses observed (200 on the card, manifest,
+  openapi.json and /healthz; 402 on GET and POST /; 404 on unknown paths). The economic gate is the only
+  throttle the provider publishes: every task costs 0.01 RLUSD and the payment challenge expires after
+  maxTimeoutSeconds 600. An honest zero.
+rate_limits: []
+size_and_time_limits:
+- {name: Payment challenge validity, limit: 600 seconds (maxTimeoutSeconds), source: 402 body and /.well-known/x402, note: 'The window in which a PAYMENT-SIGNATURE for a given invoiceId is accepted; not a request-rate limit.'}
+exhaustion:
+  status: undocumented
+  headers: []
+  note: The Cloudflare edge in front of both hosts may apply its own limits; none are stated by the provider and none were observed.

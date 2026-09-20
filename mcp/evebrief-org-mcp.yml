@@ -1,0 +1,48 @@
+generated: '2026-09-19'
+method: derived
+status: candidate
+source: openapi/evebrief-org-openapi.json
+derived_from: a2a/evebrief-org-agent-card.json
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: derived
+  note: >-
+    NO MCP SERVER EXISTS. Probed 2026-09-19: /mcp, /mcp/, /sse, /messages and /.well-known/mcp.json all 404
+    on oracle.evebrief.org; mcp.evebrief.org does not resolve; a POST of {"jsonrpc":"2.0","method":"tools/list"}
+    to the host root returned the x402 402 challenge, not an MCP response; no package in npm or PyPI. What
+    follows is a candidate tool mapping derived from the provider's own contracts so an agent framework could
+    wrap the A2A skill as a tool. It is not something the provider ships and it earns no MCP credit.
+server:
+  name: onchain-risk-oracle
+  transport: null
+  url: null
+tools:
+- name: onchain_risk_check
+  description: Check an EVM address against the curated rug-pull feed and return a none/low/high/critical verdict with labels, reasons, evidence and sources. Paid — 0.01 RLUSD per call via x402 on xrpl:0.
+  source_operation: openapi/evebrief-org-openapi.json#jsonrpc__post
+  source_skill: a2a/evebrief-org-agent-card.json#/skills/0
+  inputSchema:
+    type: object
+    required: [address]
+    properties:
+      address: {type: string, pattern: '^0x[0-9a-fA-F]{40}$', description: EVM address (token, wallet or contract)}
+      chain: {type: string, enum: [eth, base, bsc, arb, op, polygon], description: Chain short code; optional}
+      deep: {type: boolean, default: false, description: Also run live evm-lab heuristics (more expensive/slower)}
+      fork: {type: boolean, default: false, description: 'With deep=true: anvil-fork owner-privilege checks'}
+  inputSchema_provenance: verbatim from the agent card skill inputSchema (the OpenAPI declares no request body)
+  payment: {protocol: x402, amount: '0.01', asset: RLUSD, network: 'xrpl:0', facilitator: 'https://xrpl-facilitator-mainnet.t54.ai'}
+- name: get_health
+  description: Free health check — status, payment_mode, feed_records, feed_latest_ts.
+  source_operation: openapi/evebrief-org-openapi.json#healthz_healthz_get
+  inputSchema: {type: object, properties: {}}
+- name: get_payment_requirements
+  description: Read the x402 resource-server manifest (price, network, facilitator) before calling the paid tool.
+  source_operation: openapi/evebrief-org-openapi.json#x402_manifest__well_known_x402_get
+  inputSchema: {type: object, properties: {}}
+not_mapped:
+- {operation: agent_card__well_known_agent_json_get, reason: discovery document, not a tool}
+- {operation: agent_card_alt__well_known_agent_card_json_get, reason: discovery document, not a tool}

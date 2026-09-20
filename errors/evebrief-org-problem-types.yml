@@ -1,0 +1,37 @@
+generated: '2026-09-19'
+method: derived
+format: mixed
+source: openapi/evebrief-org-openapi.json
+observed_on: https://oracle.evebrief.org/
+summary: >-
+  The contract declares no 4xx or 5xx responses at all (each of the five operations declares only 200), so
+  every entry below is an OBSERVED response, recorded with the status the host actually returned on
+  2026-09-19. Two envelopes: FastAPI's {"detail": string} for routing errors, and the x402 v2
+  PaymentRequirements object for the 402 that gates the only functional operation. Neither is RFC 9457.
+  JSON-RPC error objects are implied by the JSONRPC transport but sit behind the 402 and were not observed.
+problems:
+- status: 402
+  title: Payment required (x402)
+  envelope: x402 v2 PaymentRequirements
+  media_type: application/json
+  headers: [PAYMENT-REQUIRED (base64 JSON copy of the body)]
+  detail: '{"x402Version":2,"resource":{"url":"https://oracle.evebrief.org/","description":"On-Chain-Risk-Check — EVM-Adresse rein, Rug-Risiko-Urteil mit Evidenz raus","mimeType":"application/json"},"accepts":[{"scheme":"exact","network":"xrpl:0","amount":"0.01","asset":"524C555344000000000000000000000000000000","payTo":"rH2tcNh56xoLUssRubra7DSDCgrReSZodW","maxTimeoutSeconds":600,"extra":{"issuer":"rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De","sourceTag":804681468,"facilitator":{"id":"t54-xrpl","name":"t54 XRPL x402 facilitator"},"invoiceId":"<per request>"}}],"error":"PAYMENT-SIGNATURE header is required","extensions":{}}'
+  when: Any GET or POST to / without a valid PAYMENT-SIGNATURE header, regardless of body — observed on GET /, POST / with a JSON-RPC tasks/get, and POST / with an MCP-style tools/list.
+  remediation: Settle 0.01 RLUSD on xrpl:0 to payTo through the facilitator within maxTimeoutSeconds (600) and retry with the PAYMENT-SIGNATURE header; the invoiceId is per challenge.
+  source_operation: openapi/evebrief-org-openapi.json#jsonrpc__post
+  declared_in_contract: false
+- status: 404
+  title: Not Found
+  envelope: '{"detail": "Not Found"}'
+  media_type: application/json
+  detail: FastAPI default. Observed on /openapi.yaml, /swagger.json, /api-docs, /llms.txt, /mcp, /a2a, /graphql, every unserved /.well-known/* path and a negative-control path (22 bytes each).
+  declared_in_contract: false
+- status: 200
+  title: Healthy
+  note: 'Not an error; recorded because /healthz is the only free diagnostic. Observed {"status":"ok","payment_mode":"xrpl","feed_records":114110,"feed_latest_ts":"2026-09-19T23:20:48+00:00"}.'
+  source_operation: openapi/evebrief-org-openapi.json#healthz_healthz_get
+not_observed:
+- status: 422
+  note: FastAPI's default validation error shape ({"detail":[{loc,msg,type}]}) is likely for a malformed JSON-RPC body, but the 402 gate answers first, so it was not observed and is not asserted.
+- json_rpc_errors:
+  note: A2A-defined JSON-RPC errors (-32001 TaskNotFound, -32601 Method not found, etc.) were not observable without paying.

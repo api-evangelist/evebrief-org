@@ -1,0 +1,70 @@
+generated: '2026-09-19'
+method: derived
+source: a2a/evebrief-org-agent-card.json
+derived_from: openapi/evebrief-org-openapi.json
+summary: >-
+  The OpenAPI carries no component schemas (every response is an untyped object), so the model is derived
+  from the one place the provider publishes a typed contract: the agent card's skills[0].inputSchema and
+  outputSchema. One request entity (an EVM address plus optional chain and depth flags) yields one verdict
+  entity that references the provider's curated rug-pull feed and its live-heuristics tier. There are no ids,
+  no collections and no cross-entity links a client can follow — the graph is a single request/response
+  pair.
+id_style:
+  format: no provider-issued identifiers
+  keys:
+  - entity: Address
+    key: address
+    format: 'EVM hex address, ^0x[0-9a-fA-F]{40}$'
+    example: '0xb8c6ff50ea596671871784018a2030fe1852291a (from the card examples)'
+  - entity: Chain
+    key: chain
+    format: short code enum
+    values: [eth, base, bsc, arb, op, polygon]
+  - entity: PaymentChallenge
+    key: invoiceId
+    format: 32-hex string, per 402 challenge
+    source: x402 PaymentRequirements
+entities:
+- name: RiskCheckRequest
+  description: The input to the single skill. address is required; chain improves attribution; deep enables live evm-lab heuristics; fork (with deep) enables anvil-fork owner-privilege checks.
+  schemas: ['skills[0].inputSchema']
+  fields:
+  - {name: address, type: string, required: true, pattern: '^0x[0-9a-fA-F]{40}$'}
+  - {name: chain, type: string, enum: [eth, base, bsc, arb, op, polygon]}
+  - {name: deep, type: boolean, default: false}
+  - {name: fork, type: boolean, default: false}
+  relationships:
+  - {has_one: RiskVerdict, via: address}
+  - {belongs_to: PaymentChallenge, via: 'the x402 exchange that paid for it', note: 'runtime relationship; no field links them'}
+- name: RiskVerdict
+  description: The output. A four-level risk enum with the labels and reasons behind it, an evidence object, the live-tier and feed summaries, the sources consulted and a disclaimer.
+  schemas: ['skills[0].outputSchema']
+  fields:
+  - {name: address, type: string, required: true}
+  - {name: risk, type: string, enum: [none, low, high, critical], required: true}
+  - {name: labels, type: 'array<string>', required: true}
+  - {name: reasons, type: 'array<string>', required: true}
+  - {name: evidence, type: object, required: true}
+  - {name: live_tier, type: object}
+  - {name: feed, type: object}
+  - {name: sources, type: 'array<string>', required: true}
+  - {name: disclaimer, type: string}
+  relationships:
+  - {belongs_to: RiskCheckRequest, via: address}
+  - {has_many: Evidence, via: evidence, note: 'untyped object in the contract; the card prose says linked rug tokens are the evidence'}
+  - {belongs_to: RugPullFeed, via: feed}
+- name: RugPullFeed
+  description: >-
+    The provider's curated feed the address is matched against — per the card, known rug tokens, their
+    deployers, rug beneficiaries, funding sources and rug-factory hubs. Not addressable through the API;
+    its size and freshness are exposed by /healthz (feed_records 114110, feed_latest_ts at probe time).
+  schemas: []
+  relationships:
+  - {has_many: RiskVerdict, via: feed}
+- name: PaymentChallenge
+  description: The x402 v2 PaymentRequirements object returned on 402 — resource, accepts[] (scheme, network, amount, asset, payTo, maxTimeoutSeconds, extra.issuer, extra.facilitator, extra.invoiceId), error.
+  schemas: []
+  source: errors/evebrief-org-problem-types.yml
+  relationships:
+  - {has_one: RiskCheckRequest, via: 'the retried call carrying PAYMENT-SIGNATURE'}
+render: null
