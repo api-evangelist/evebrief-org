@@ -1,0 +1,2 @@
+# x-archived-from: evebrief-org-openapi.json
+# x-archived-on: 2026-09-26

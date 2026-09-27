@@ -1,0 +1,19 @@
+openapi: 3.2.0
+info:
+  title: onchain-risk-oracle Onchain Risk Oracle API
+  version: 0.1.0
+tags:
+- name: Onchain Risk Oracle
+paths:
+  /:
+    post:
+      summary: Jsonrpc
+      operationId: jsonrpc__post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Onchain Risk Oracle

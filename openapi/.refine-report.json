@@ -1,0 +1,29 @@
+{
+  "provider": "evebrief-org",
+  "sources": [
+    "evebrief-org-openapi.json"
+  ],
+  "outputs": [
+    "evebrief-org-well-known-api-openapi.yml",
+    "evebrief-org-healthz-api-openapi.yml",
+    "evebrief-org-onchain-risk-oracle-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/evebrief-org-openapi.json"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "evebrief-org-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "evebrief-org-openapi.json: tagged paths GET /.well-known/agent.json -> .well Known",
+    "evebrief-org-openapi.json: tagged paths GET /.well-known/agent-card.json -> .well Known",
+    "evebrief-org-openapi.json: tagged paths GET /.well-known/x402 -> .well Known",
+    "evebrief-org-openapi.json: tagged paths GET /healthz -> Healthz",
+    "evebrief-org-openapi.json: tagged paths POST / -> Onchain Risk Oracle",
+    "evebrief-org-openapi.json: declared missing tag: .well Known",
+    "evebrief-org-openapi.json: declared missing tag: Healthz",
+    "evebrief-org-openapi.json: declared missing tag: Onchain Risk Oracle",
+    "apis.yml register: written (+3 apis, 4 total)"
+  ],
+  "skipped": []
+}

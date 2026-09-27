@@ -29,9 +29,9 @@ tags:
 - DeFi
 - EVM
 - Security
-- Fraud Detection
-- Risk
-- agent-native
+- Fraud Prevention
+- Risk Management
+- Agent-Native
 - Market Intelligence
 tags_raw:
 - Agents
@@ -46,52 +46,28 @@ tags_raw:
 - Risk
 - Agent-native
 - Market intelligence
+- agent-native
+- Fraud Detection
 apis:
-- aid: evebrief-org:onchain-risk-oracle-api
-  name: onchain-risk-oracle API
-  description: >-
-    The FastAPI-generated OpenAPI 3.1.0 contract (info.title onchain-risk-oracle, version 0.1.0) for the
-    oracle host: five routes — GET /.well-known/agent.json and /.well-known/agent-card.json (the A2A card),
-    GET /.well-known/x402 (the x402 v2 resource-server manifest), GET /healthz (status, payment_mode,
-    feed_records, feed_latest_ts) and POST / (the JSON-RPC task endpoint). The contract declares no servers[],
-    no securitySchemes, no request or response schemas and no 4xx responses; the real parameter contract is
-    the skill inputSchema/outputSchema in the agent card. Every POST to / is a paid x402 task (0.01 RLUSD on
-    XRPL) and answers HTTP 402 with PaymentRequirements until a PAYMENT-SIGNATURE header is supplied.
-  humanURL: https://oracle.evebrief.org/docs
-  baseURL: https://oracle.evebrief.org
-  tags:
-  - Agents
-  - x402
-  - EVM
-  - Security
-  - Risk
-  properties:
-  - type: OpenAPI
-    url: openapi/evebrief-org-openapi.json
-  - type: OpenAPI
-    name: onchain-risk-oracle OpenAPI (provider-hosted)
-    url: https://oracle.evebrief.org/openapi.json
-  - type: Documentation
-    url: https://oracle.evebrief.org/docs
-  - type: APIReference
-    url: https://oracle.evebrief.org/redoc
-  - type: Overlay
-    url: overlays/evebrief-org-openapi-overlay.yaml
 - aid: evebrief-org:onchain-risk-oracle-a2a-agent
   name: onchain-risk-oracle A2A Agent
   description: >-
     Agent2Agent (A2A) protocol surface: an agent card at https://oracle.evebrief.org/.well-known/agent-card.json
-    (protocolVersion 0.3.0, JSONRPC transport, version 0.1.0, provider "openclaw / evm-lab") advertising one
-    skill, onchain-risk-check — send an EVM address (optionally chain, deep, fork) and receive a structured
+    (protocolVersion 0.3.0, JSONRPC transport, version 0.1.0, provider "openclaw / evm-lab") advertising
+    one skill, onchain-risk-check — send an EVM address (optionally chain, deep, fork) and receive a structured
     risk verdict (none / low / high / critical) with labels, reasons, evidence and sources. The JSON-RPC
-    endpoint is the host root, https://oracle.evebrief.org/; the card declares the x402 payment extension as
-    REQUIRED (exact scheme, network xrpl:0, asset RLUSD, amount 0.01, facilitator
-    xrpl-facilitator-mainnet.t54.ai) and both GET and POST on the endpoint return HTTP 402 with x402 v2
-    PaymentRequirements until paid. Streaming, push notifications and state-transition history are declared
-    unsupported.
+    endpoint is the host root, https://oracle.evebrief.org/; the card declares the x402 payment extension
+    as REQUIRED (exact scheme, network xrpl:0, asset RLUSD, amount 0.01, facilitator xrpl-facilitator-mainnet.t54.ai)
+    and both GET and POST on the endpoint return HTTP 402 with x402 v2 PaymentRequirements until paid.
+    Streaming, push notifications and state-transition history are declared unsupported.
   humanURL: https://oracle.evebrief.org/.well-known/agent-card.json
   baseURL: https://oracle.evebrief.org/
   tags:
+  - A2A
+  - Agent-Native
+  - x402
+  - XRPL
+  tags_raw:
   - A2A
   - agent-native
   - x402
@@ -102,12 +78,57 @@ apis:
   - type: AgentCard
     name: A2A Agent Card (provider-hosted)
     url: https://oracle.evebrief.org/.well-known/agent-card.json
+- aid: evebrief-org:evebrief-org-healthz-api
+  name: openclaw / evm-lab Healthz API
+  description: The Healthz API from openclaw / evm-lab — 1 operation(s) for healthz.
+  humanURL: https://oracle.evebrief.org/docs
+  baseURL: https://oracle.evebrief.org
+  tags:
+  - Healthz
+  properties:
+  - type: OpenAPI
+    url: openapi/evebrief-org-healthz-api-openapi.yml
+  - type: Documentation
+    url: https://oracle.evebrief.org/docs
+  - type: APIReference
+    url: https://oracle.evebrief.org/redoc
+- aid: evebrief-org:evebrief-org-onchain-risk-oracle-api
+  name: openclaw / evm-lab Onchain Risk Oracle API
+  description: >-
+    The Onchain Risk Oracle API from openclaw / evm-lab — 1 operation(s) for onchain risk oracle.
+  humanURL: https://oracle.evebrief.org/docs
+  baseURL: https://oracle.evebrief.org
+  tags:
+  - Onchain Risk Oracle
+  properties:
+  - type: OpenAPI
+    url: openapi/evebrief-org-onchain-risk-oracle-api-openapi.yml
+  - type: Documentation
+    url: https://oracle.evebrief.org/docs
+  - type: APIReference
+    url: https://oracle.evebrief.org/redoc
+- aid: evebrief-org:evebrief-org-well-known-api
+  name: openclaw / evm-lab .well Known API
+  description: The .well Known API from openclaw / evm-lab — 3 operation(s) for .well known.
+  humanURL: https://oracle.evebrief.org/docs
+  baseURL: https://oracle.evebrief.org
+  tags:
+  - .well Known
+  properties:
+  - type: OpenAPI
+    url: openapi/evebrief-org-well-known-api-openapi.yml
+  - type: Documentation
+    url: https://oracle.evebrief.org/docs
+  - type: APIReference
+    url: https://oracle.evebrief.org/redoc
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/evebrief-org-openapi-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/evebrief-org-agentic-access.yml
 - type: DomainSecurity
@@ -149,3 +170,19 @@ x-enrichment:
   status: enriched
   artifacts_added: 22
   pass: local-v3
+x-x402:
+  verified: true
+  probed: '2026-09-24'
+  url: "https://oracle.evebrief.org/"
+  evidence:
+  - "header:payment-required"
+  - "body:x402Version"
+  - "body:accepts[scheme,payTo,asset]"
+  control: 404
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://oracle.evebrief.org/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "0.3.0"
+  control: 404
