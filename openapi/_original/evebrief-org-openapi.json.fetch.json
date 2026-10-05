@@ -1,0 +1,12 @@
+{
+ "url": "https://oracle.evebrief.org/openapi.json",
+ "requested_url": "https://oracle.evebrief.org/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 1385,
+ "sha256": "bf1a6109639d0c4a020491e27caed2779ed5865f548cc5ce6c9253bea67b0872",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
