@@ -127,6 +127,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Pricing
+  url: https://oracle.evebrief.org/.well-known/x402
 - type: Overlay
   url: overlays/evebrief-org-openapi-overlay.yaml
 - type: AgenticAccess
