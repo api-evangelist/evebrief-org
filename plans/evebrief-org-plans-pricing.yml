@@ -42,3 +42,17 @@ related_product_pricing:
     members lock in launch pricing." Recorded for context only; not counted in plan_count.
   url: https://evebrief.org/
   status: 200
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - subscription
+  units: []
+  plans:
+  - name: On-Chain-Risk-Check (per task)
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - other
