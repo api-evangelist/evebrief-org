@@ -64,5 +64,121 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-openclaw / evm-lab is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry) and added to the network as a stub for full-pipeline profiling.
-- https://evebrief.org/
+openclaw / evm-lab is the operator name on an A2A agent card served from oracle.evebrief.org, a subdomain of evebrief.org. The apex site is EveBrief, a waitlist-stage market and competitor intelligence briefing product for boutique agencies and independent consultants (indicative tiers Free / $19 / $39 a month; no API of its own). The oracle subdomain runs onchain-risk-oracle: a pay-per-task agent that checks an EVM address (eth, base, bsc, arb, op, polygon) against a curated rug-pull feed (114,110 records at probe time) and returns a none / low / high / critical risk verdict with labels, reasons and evidence. It is published as an A2A 0.3.0 JSON-RPC agent at https://oracle.evebrief.org/ (agent card at /.well-known/agent-card.json and the legacy /.well-known/agent.json), gated by x402 v2 payment of 0.01 RLUSD on the XRP Ledger mainnet through the t54 facilitator, and described by a FastAPI-generated OpenAPI 3.1.0 at /openapi.json with Swagger UI at /docs and ReDoc at /redoc. The card's provider.url credits the OpenClaw open-source agent framework (github.com/openclaw/openclaw); that organization is the software the agent runs on, not this operator.
+
+**Areas:** Agents · A2A · x402 · XRPL · Blockchain · DeFi · EVM · Security · Fraud Prevention · Risk Management · Agent-Native · Market Intelligence
+
+## openclaw / evm-lab on APIs.io
+
+Everything profiled for openclaw / evm-lab is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/evebrief-org/](https://apis.io/providers/evebrief-org/)** — or go straight to one of the APIs or properties below.
+
+### APIs (4)
+
+- [onchain-risk-oracle A2A Agent](https://apis.io/apis/evebrief-org/onchain-risk-oracle-a2a-agent/) — Agent2Agent (A2A) protocol surface: an agent card at https://oracle.evebrief.org/.well-known/agent-card.json (protocolVersion 0.3.0, JSONRPC transport,…
+- [openclaw / evm-lab Healthz API](https://apis.io/apis/evebrief-org/evebrief-org-healthz-api/) — The Healthz API from openclaw / evm-lab — 1 operation(s) for healthz.
+- [openclaw / evm-lab Onchain Risk Oracle API](https://apis.io/apis/evebrief-org/evebrief-org-onchain-risk-oracle-api/) — The Onchain Risk Oracle API from openclaw / evm-lab — 1 operation(s) for onchain risk oracle.
+- [openclaw / evm-lab .well Known API](https://apis.io/apis/evebrief-org/evebrief-org-well-known-api/) — The .well Known API from openclaw / evm-lab — 3 operation(s) for .well known.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [onchain-risk-oracle](https://apis.io/servers/evebrief-org/onchain-risk-oracle/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Evebrief Org Agentic Access](https://apis.io/agentic-access/evebrief-org/evebrief-org-agentic-access/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Evebrief Org Openapi Overlay](https://apis.io/overlays/evebrief-org/evebrief-org-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Evebrief Org Authentication](https://apis.io/security/evebrief-org/evebrief-org-authentication/)
+- [Evebrief Org Domain Security](https://apis.io/security/evebrief-org/evebrief-org-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Evebrief Org Plans Pricing](https://apis.io/plans/evebrief-org/evebrief-org-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Evebrief Org Rate Limits](https://apis.io/rate-limits/evebrief-org/evebrief-org-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://evebrief.org/)
+- [Documentation](https://oracle.evebrief.org/docs)
+- [API reference](https://oracle.evebrief.org/redoc)
+- [Pricing](https://oracle.evebrief.org/.well-known/x402)
+- [Blog](https://evebrief.org/blog/)
+
+## API Evangelist rating
+
+**Kin Score 29.3** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 62.5 |
+| Contract quality | 33.7 |
+| Contract governance | 18.2 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 32.7 |
+| Access clarity | 31.6 |
+
+**Agent readiness 27.2** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | conformant |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/evebrief-org/](https://apis.io/providers/evebrief-org/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for openclaw / evm-lab: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/evebrief-org/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
