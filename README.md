@@ -1,4 +1,4 @@
-# openclaw / evm-lab
+# EveBrief
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -68,16 +68,25 @@ openclaw / evm-lab is the operator name on an A2A agent card served from oracle.
 
 **Areas:** Agents · A2A · x402 · XRPL · Blockchain · DeFi · EVM · Security · Fraud Prevention · Risk Management · Agent-Native · Market Intelligence
 
-## openclaw / evm-lab on APIs.io
+## EveBrief on APIs.io
 
-Everything profiled for openclaw / evm-lab is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/evebrief-org/](https://apis.io/providers/evebrief-org/)** — or go straight to one of the APIs or properties below.
+Everything profiled for EveBrief is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/evebrief-org/](https://apis.io/providers/evebrief-org/)** — or go straight to one of the APIs or properties below.
 
-### APIs (4)
+### APIs (13)
 
 - [onchain-risk-oracle A2A Agent](https://apis.io/apis/evebrief-org/onchain-risk-oracle-a2a-agent/) — Agent2Agent (A2A) protocol surface: an agent card at https://oracle.evebrief.org/.well-known/agent-card.json (protocolVersion 0.3.0, JSONRPC transport,…
 - [openclaw / evm-lab Healthz API](https://apis.io/apis/evebrief-org/evebrief-org-healthz-api/) — The Healthz API from openclaw / evm-lab — 1 operation(s) for healthz.
-- [openclaw / evm-lab Onchain Risk Oracle API](https://apis.io/apis/evebrief-org/evebrief-org-onchain-risk-oracle-api/) — The Onchain Risk Oracle API from openclaw / evm-lab — 1 operation(s) for onchain risk oracle.
 - [openclaw / evm-lab .well Known API](https://apis.io/apis/evebrief-org/evebrief-org-well-known-api/) — The .well Known API from openclaw / evm-lab — 3 operation(s) for .well known.
+- [EveBrief Base API](https://apis.io/apis/evebrief-org/evebrief-org-base-api/) — The Base API from EveBrief — 1 operation(s) for base.
+- [EveBrief Changelog API](https://apis.io/apis/evebrief-org/evebrief-org-changelog-api/) — The Changelog API from EveBrief — 1 operation(s) for changelog.
+- [EveBrief Check API](https://apis.io/apis/evebrief-org/evebrief-org-check-api/) — The Check API from EveBrief — 1 operation(s) for check.
+- [EveBrief EveBrief Risk Oracle (ERO) API](https://apis.io/apis/evebrief-org/evebrief-org-evebrief-risk-oracle-ero-api/) — The EveBrief Risk Oracle (ERO) API from EveBrief — 1 operation(s) for evebrief risk oracle (ero).
+- [EveBrief MCP API](https://apis.io/apis/evebrief-org/evebrief-org-mcp-api/) — The Mcp API from EveBrief — 1 operation(s) for mcp.
+- [EveBrief Preview API](https://apis.io/apis/evebrief-org/evebrief-org-preview-api/) — The Preview API from EveBrief — 1 operation(s) for preview.
+- [EveBrief Privacy API](https://apis.io/apis/evebrief-org/evebrief-org-privacy-api/) — The Privacy API from EveBrief — 1 operation(s) for privacy.
+- [EveBrief Solana API](https://apis.io/apis/evebrief-org/evebrief-org-solana-api/) — The Solana API from EveBrief — 1 operation(s) for solana.
+- [EveBrief Terms API](https://apis.io/apis/evebrief-org/evebrief-org-terms-api/) — The Terms API from EveBrief — 1 operation(s) for terms.
+- [EveBrief Xrpl API](https://apis.io/apis/evebrief-org/evebrief-org-xrpl-api/) — The Xrpl API from EveBrief — 7 operation(s) for xrpl.
 
 ### Published properties
 
@@ -93,32 +102,45 @@ Model Context Protocol servers that expose the API to agents.
 
 Which operations an agent can call, which act, and which need a human in the loop.
 
-- [Evebrief Org Agentic Access](https://apis.io/agentic-access/evebrief-org/evebrief-org-agentic-access/)
+- [EveBrief Agentic Access](https://apis.io/agentic-access/evebrief-org/evebrief-org-agentic-access/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Evebrief Org Context](https://apis.io/jsonld/evebrief-org/evebrief-org-context/)
 
 #### Overlays (1)
 
 OpenAPI overlays, including conversational phrasing for each operation.
 
-- [Evebrief Org Openapi Overlay](https://apis.io/overlays/evebrief-org/evebrief-org-openapi-overlay/)
+- [EveBrief Openapi Overlay](https://apis.io/overlays/evebrief-org/evebrief-org-openapi-overlay/)
 
-#### Security (2)
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [EveBrief API Rules](https://apis.io/rules/evebrief-org/evebrief-org-rules/)
+
+#### Security (3)
 
 Authentication, trust centre, and vulnerability disclosure.
 
-- [Evebrief Org Authentication](https://apis.io/security/evebrief-org/evebrief-org-authentication/)
-- [Evebrief Org Domain Security](https://apis.io/security/evebrief-org/evebrief-org-domain-security/)
+- [EveBrief Authentication](https://apis.io/security/evebrief-org/evebrief-org-authentication/)
+- [EveBrief Domain Security](https://apis.io/security/evebrief-org/evebrief-org-domain-security/)
+- [EveBrief Vulnerability Disclosure](https://apis.io/security/evebrief-org/evebrief-org-vulnerability-disclosure/)
 
 #### Plans and pricing (1)
 
 Published plans, tiers and prices.
 
-- [Evebrief Org Plans Pricing](https://apis.io/plans/evebrief-org/evebrief-org-plans-pricing/)
+- [EveBrief Plans Pricing](https://apis.io/plans/evebrief-org/evebrief-org-plans-pricing/)
 
 #### Rate limits (1)
 
 Published request limits.
 
-- [Evebrief Org Rate Limits](https://apis.io/rate-limits/evebrief-org/evebrief-org-rate-limits/)
+- [EveBrief Rate Limits](https://apis.io/rate-limits/evebrief-org/evebrief-org-rate-limits/)
 
 ## Where to find this API
 
@@ -128,11 +150,15 @@ Links to the company's own pages. This repository publishes no copy of their spe
 - [Documentation](https://oracle.evebrief.org/docs)
 - [API reference](https://oracle.evebrief.org/redoc)
 - [Pricing](https://oracle.evebrief.org/.well-known/x402)
+- [Changelog](https://oracle.evebrief.org/changelog)
 - [Blog](https://evebrief.org/blog/)
+- [Security](https://oracle.evebrief.org/terms)
+- [Terms of service](https://oracle.evebrief.org/terms)
+- [Privacy policy](https://oracle.evebrief.org/privacy)
 
 ## API Evangelist rating
 
-**Kin Score 29.3** — thin · rubric 0.24.0 · scored 2026-10-17
+**Kin Score 29.3** — thin · rubric 0.25.0 · scored 2026-10-23
 
 | Facet | Score |
 |---|---|
@@ -143,7 +169,7 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Developer ergonomics | 32.7 |
 | Access clarity | 31.6 |
 
-**Agent readiness 27.2** — agent-aware
+**Agent readiness 28.7** — agent-ready
 
 | Agent-readiness dimension | Result |
 |---|---|
@@ -166,6 +192,8 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Protected Resource Metadata | — |
 | Dynamic Client Registration | — |
 | Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
 
 **Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
 
@@ -175,7 +203,7 @@ The rubric is published at [github.com/api-evangelist/kin-score](https://github.
 
 API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
 
-The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for openclaw / evm-lab: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for EveBrief: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
 
 ## Open an issue
 
